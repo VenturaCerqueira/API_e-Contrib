@@ -3,7 +3,7 @@ const path = require('path');
 const mysql = require('mysql2');
 const winston = require('winston');
 
-const logDir = path.join(__dirname, '../../logs');
+const logDir = path.join('/tmp', 'logs');
 
 // Cria o diretório se ele não existir
 if (!fs.existsSync(logDir)) {
