@@ -1,8 +1,9 @@
 [build]
-  command = "npm install"  # Comando para instalar dependências
-  functions = "netlify/functions"  # Diretório onde suas funções estão localizadas
+  functions = "netlify/functions"  # Indica onde as funções serverless estão localizadas
+  publish = "public"  # Diretório onde o Netlify vai procurar os arquivos estáticos para o frontend (se houver)
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "/.netlify/functions/:splat"  # Redireciona todas as requisições para /api/* para as funções serverless
   status = 200
+  force = true
