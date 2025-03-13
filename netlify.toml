@@ -1,12 +1,20 @@
+# Definindo as configurações de build e funções do Netlify
 [build]
-  command = "npm install"  # Comando para instalar dependências
-  publish = "public"       # Caso você não tenha uma pasta 'public', pode deixar assim ou removê-la
-  functions = "netlify/functions"  # Pasta onde suas funções serverless estão
+  # Comando para instalar dependências
+  command = "npm install"
+  
+  # Pasta de publicação do projeto (no caso, você pode deixar vazio se não gerar arquivos estáticos)
+  publish = "public"
+  
+  # Definindo a pasta de funções para o Netlify
+  functions = "netlify/functions"  # Pasta onde suas funções estão localizadas
 
+# Plugins a serem usados durante o build
 [[plugins]]
-  package = "@netlify/plugin-functions-installation"   # Plugin para instalar as dependências das funções serverless
+  package = "@netlify/plugin-functions-installation"  # Plugin para instalar as dependências das funções
 
+# Definindo redirecionamentos para usar funções API
 [redirects]
-  from = "/api/*"  # Redireciona todas as requisições para a função
-  to = "/.netlify/functions/:splat"  # Especifica que a rota será tratada pelas funções
+  from = "/api/*"  # Redireciona chamadas para a API
+  to = "/.netlify/functions/:splat"  # Rota que será tratada pela função correspondente
   status = 200
