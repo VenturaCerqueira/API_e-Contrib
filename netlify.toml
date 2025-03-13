@@ -1,14 +1,12 @@
 [build]
-  command = "npm run build"
-  publish = "/opt/build/repo"  
+  command = "npm install"  # Comando para instalar dependências
+  publish = "public"       # Caso você não tenha uma pasta 'public', pode deixar assim ou removê-la
+  functions = "netlify/functions"  # Pasta onde suas funções serverless estão
 
-[functions]
-  node_bundler = "esbuild"
-
-[functionsDirectory]
-  directory = "netlify/functions"
+[[plugins]]
+  package = "@netlify/plugin-functions-installation"   # Plugin para instalar as dependências das funções serverless
 
 [redirects]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  from = "/api/*"  # Redireciona todas as requisições para a função
+  to = "/.netlify/functions/:splat"  # Especifica que a rota será tratada pelas funções
   status = 200
