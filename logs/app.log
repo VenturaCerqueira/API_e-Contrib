@@ -1,0 +1,53 @@
+{"level":"error","message":"Erro ao conectar ao banco de dados: connect ECONNREFUSED 127.0.0.1:3306"}
+{"level":"error","message":"Erro ao conectar ao banco de dados: connect ECONNREFUSED 127.0.0.1:3306"}
+{"level":"error","message":"Erro ao conectar ao banco de dados: connect ECONNREFUSED 127.0.0.1:3306"}
+{"level":"error","message":"Erro ao conectar ao banco de dados: connect ECONNREFUSED 127.0.0.1:3306"}
+{"level":"error","message":"Erro ao conectar ao banco de dados: connect ECONNREFUSED 127.0.0.1:3306"}
+{"level":"error","message":"Erro ao conectar ao banco de dados: connect ECONNREFUSED 127.0.0.1:3306"}
+{"level":"error","message":"Erro ao conectar ao banco de dados: connect ECONNREFUSED 127.0.0.1:3306"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+[31merror[39m: ❌ Erro ao conectar com o Redis: Error: connect ECONNREFUSED 127.0.0.1:6379
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+{"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
