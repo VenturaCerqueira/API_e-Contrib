@@ -1,7 +1,4 @@
-// netlify/functions/contribuintes.js
-
-const { getContribuintes } = require('../../controllers/contribuintes.controller');  // Sua função de controller
-
+const { getContribuintes } = require('../../src/controllers/contribuintes.controller');  
 exports.handler = async (event, context) => {
   try {
     const response = await getContribuintes(event, context);  // Chama sua função para processar a requisição
