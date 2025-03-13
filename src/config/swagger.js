@@ -1,16 +1,16 @@
-const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerJsDoc = require('swagger-jsdoc');
 
 const swaggerOptions = {
-  swaggerDefinition: {
+  definition: {
+    openapi: '3.0.0',
     info: {
-      title: 'API Gestão Tributária',
+      title: 'API de Contribuintes',
       version: '1.0.0',
-      description: 'API para gerenciar dados tributários e contribuintes',
-    },
+      description: 'API para consultar dados de contribuintes'
+    }
   },
-  apis: ['./src/routes/*.js'],  // Definindo onde estão as rotas
+  apis: ['./routes/*.js', './controllers/*.js']
 };
 
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
 module.exports = swaggerDocs;

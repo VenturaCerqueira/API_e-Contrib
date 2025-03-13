@@ -1,6 +1,6 @@
 const winston = require('winston');
 
-// Criação de um logger usando o Winston
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
