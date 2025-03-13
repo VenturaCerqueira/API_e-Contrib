@@ -1,7 +1,6 @@
 [build]
-  command = "npm install" 
-  functions = "netlify/functions" 
-  publish = "public" 
+  command = "npm install"  # Comando para instalar dependências
+  functions = "netlify/functions"  # Diretório onde suas funções estão localizadas
 
 [[redirects]]
   from = "/api/*"
