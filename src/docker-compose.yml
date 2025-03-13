@@ -1,8 +1,8 @@
-version: "3.8"
+version: '3.8'
 services:
   app:
     build: .
-    container_name: api-gestao
+    container_name: api_e_contrib
     ports:
       - "3000:3000"
     environment:
@@ -13,22 +13,11 @@ services:
       - DB_PORT=3306
     depends_on:
       - db
-    networks:
-      - app-network
-
   db:
     image: mysql:8
-    container_name: mysql-gestao
+    container_name: db_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_ROOT_PASSWORD: 126303@acv
       MYSQL_DATABASE: db_gestaotributaria_riachaodojacuipe
-      MYSQL_USER: anderson
-      MYSQL_PASSWORD: 126303@acv
     ports:
       - "3306:3306"
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge

@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  title: API de Contribuintes
+  description: API para consultar dados de contribuintes
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor local
+
+paths:
+  /contribuintes:
+    get:
+      summary: Consulta dados dos contribuintes
+      description: Retorna uma lista de todos os contribuintes
+      operationId: getContribuintes
+      tags:
+        - Contribuintes
+      responses:
+        '200':
+          description: Consulta realizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Consulta realizada com sucesso."
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Contribuinte:
+                          type: string
+                          example: "Empresa X"
+                        dados:
+                          type: object
+                          properties:
+                            tipo:
+                              type: string
+                              example: "Jurídica"
+                            cpf_cnpj:
+                              type: string
+                              example: "12345678000195"
+                            fantasia:
+                              type: string
+                              example: "Empresa XYZ"
+                            email:
+                              type: string
+                              example: "contato@empresa.com"
+                            contato:
+                              type: string
+                              example: "123456789"
+                            contato2:
+                              type: string
+                              example: "987654321"
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: "2025-03-13T10:00:00Z"
+                            updated_at:
+                              type: string
+                              format: date-time
+                              example: "2025-03-13T10:00:00Z"
+                        endereco:
+                          type: object
+                          properties:
+                            fk_pais:
+                              type: string
+                              example: "Brasil"
+                            fk_cidade:
+                              type: string
+                              example: "Salvador"
+                            fk_tipo_logradouro:
+                              type: string
+                              example: "Rua"
+                            fk_bairro:
+                              type: string
+                              example: "Centro"
+                            cep:
+                              type: string
+                              example: "40000000"
+                            endereco:
+                              type: string
+                              example: "Av. Sete de Setembro"
+                            numero:
+                              type: string
+                              example: "123"
+                            complemento:
+                              type: string
+                              example: "Apto 202"
+                            site:
+                              type: string
+                              example: "www.empresa.com.br"
+        '500':
+          description: Erro ao buscar dados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Erro ao buscar dados"

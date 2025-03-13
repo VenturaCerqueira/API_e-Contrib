@@ -5,7 +5,8 @@ const express = require('express');
 const app = express();
 const contribuintesRoutes = require('./routes/contribuintes.routes');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocs = require('./config/swagger');
+const YAML = require('yamljs');  // Importando a biblioteca YAML
+const swaggerDocument = YAML.load('./src/config/swagger.yaml');  // Carregando o arquivo YAML para o Swagger
 const winston = require('winston');
 
 // Configuração do logger do Winston
@@ -22,7 +23,9 @@ const logger = winston.createLogger({
 
 // Middlewares
 app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Rota para documentação do Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Rotas
 app.use('/api', contribuintesRoutes);
@@ -34,7 +37,6 @@ const server = app.listen(PORT, () => {
 });
 
 // Exporta o app e o servidor para os testes
-// Para que o Jest consiga parar o servidor durante os testes
 module.exports = { app, server };
 
 // Adicionar uma função para fechar o servidor no final dos testes, se necessário
