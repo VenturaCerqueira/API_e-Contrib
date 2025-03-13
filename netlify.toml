@@ -1,16 +1,21 @@
 [build]
-  command = "npm run build"  
-  functions = "netlify/functions" 
-  publish = "/"  
+  # Comando de build (caso tenha algum processo de build, como compilação ou minificação)
+  command = "npm run build"
+  
+  # Diretório de publicação. Aqui não é necessário especificar o 'public' se for apenas a API.
+  publish = "/opt/build/repo"  # O diretório raiz onde a aplicação e funções estão.
 
 [functions]
-  directory = "netlify/functions" 
-  node_bundler = "esbuild"  
-  
-[[redirects]]
-  from = "/api/*"
-  status = 200
-  to = "/.netlify/functions/:splat"  
+  # Definindo que todas as funções na pasta netlify/functions usarão o esbuild.
+  '*'
+    node_bundler = "esbuild"
 
-[[plugins]]
-  package = "@netlify/plugin-functions-installation"  
+[functionsDirectory]
+  # Diretório onde estão as funções (no seu caso, será a pasta netlify/functions)
+  directory = "netlify/functions"
+
+[redirects]
+  # Redirecionando as rotas da API para as funções serverless
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
