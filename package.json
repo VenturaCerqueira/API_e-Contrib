@@ -21,11 +21,11 @@
   "name": "api_e-contrib",
   "description": "Consulta de Contribuinte",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "jest",
-     "build": "mkdir -p logs && npm install",
-    "start": "node src/server.js"
+    "build": "mkdir -p logs && npm install",
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
