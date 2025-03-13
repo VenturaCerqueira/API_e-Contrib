@@ -21,7 +21,7 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(),  // Log no console
     new winston.transports.File({
-      filename: path.join(__dirname, '..logs/requests.log'),  // Local do arquivo de log
+      filename: path.join(__dirname, '../../logs/requests.log'),  // Local do arquivo de log
       level: 'info',
       maxsize: 1000000,  // Tamanho máximo do arquivo (1MB)
       maxFiles: 5,       // Número máximo de arquivos de log
