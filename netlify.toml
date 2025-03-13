@@ -1,9 +1,16 @@
 [build]
-  functions = "netlify/functions"  # Indica onde as funções serverless estão localizadas
-  publish = "public"  # Diretório onde o Netlify vai procurar os arquivos estáticos para o frontend (se houver)
+  command = "npm run build"  
+  functions = "netlify/functions" 
+  publish = "/"  
 
+[functions]
+  directory = "netlify/functions" 
+  node_bundler = "esbuild"  
+  
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"  # Redireciona todas as requisições para /api/* para as funções serverless
   status = 200
-  force = true
+  to = "/.netlify/functions/:splat"  
+
+[[plugins]]
+  package = "@netlify/plugin-functions-installation"  
