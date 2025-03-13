@@ -23,9 +23,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
     "test": "jest",
-    "build": "npm install"
+     "build": "mkdir -p logs && npm install",
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
