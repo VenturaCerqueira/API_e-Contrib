@@ -53,6 +53,8 @@ const logger = winston.createLogger({
  *                   dam:
  *                     - sigla: "DAM1"
  *                       valor_total: 5000
+ *                     - sigla: "DAM2"
+ *                       valor_total: 3000
  *       500:
  *         description: Erro ao buscar dados
  */
@@ -90,7 +92,6 @@ exports.getContribuintes = async (req, res) => {
       LEFT JOIN estado e ON ci.fk_estado = e.id
       LEFT JOIN logradouro l ON c.fk_tipo_logradouro = l.id
       LEFT JOIN bairro b ON c.fk_bairro = b.id
-      LIMIT 500
     `);
 
     const [damResults] = await db.promise().query(`
@@ -104,7 +105,6 @@ exports.getContribuintes = async (req, res) => {
       JOIN lancamento_baixa lb ON (lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1)
       JOIN contribuinte c ON (c.id = l.fk_contribuinte)
       GROUP BY c.cpf_cnpj, cc.sigla
-      HAVING COUNT(cc.sigla) = 1
       ORDER BY c.cpf_cnpj, cc.sigla
       LIMIT 50
     `);
@@ -117,35 +117,30 @@ exports.getContribuintes = async (req, res) => {
         valor_total: damItem.valor_total
       }));
 
-      if (dam.length === 1) {
-        // Adicionando o DAM caso tenha apenas um DAM para o contribuinte
-        return {
-          Contribuinte: item.razao_social ? item.razao_social.trim().toUpperCase() : 'Sem informação',
-          dados: {
-            tipo: item.tipo === 1 ? 'Jurídica' : item.tipo === 0 ? 'Física' : 'Não informado',
-            cpf_cnpj: item.cpf_cnpj ? item.cpf_cnpj.replace(/\D/g, '') : 'Sem informação',
-            fantasia: item.fantasia ? item.fantasia.trim().toUpperCase() : 'Sem informação',
-            email: item.email && item.email.trim() ? item.email.trim() : 'Sem informação',
-            Telefone: item.contato && item.contato.trim() ? item.contato.trim() : 'Sem informação',
-            Celular: item.contato2 && item.contato2.trim() ? item.contato2.trim() : 'Sem informação'
-          },
-          endereco: {
-            pais: item.pais || 'Sem informação',
-            cidade_estado: item.cidade && item.estado ? `${item.cidade}/${item.estado}` : 'Sem informação',
-            tipo_logradouro: item.tipo_logradouro || 'Sem informação',
-            bairro: item.bairro || 'Sem informação',
-            cep: item.cep || 'Sem informação',
-            endereco: item.endereco || 'Sem informação',
-            numero: item.numero || 'Sem informação',
-            complemento: item.complemento || 'Sem informação',
-            site: item.site && item.site.trim() ? item.site.trim() : 'Sem informação'
-          },
-          dam // Adicionando o DAM do contribuinte
-        };
-      }
-      // Caso não tenha exatamente 1 DAM, não retornar esse contribuinte
-      return null;
-    }).filter(item => item !== null); // Filtrando contribuintes que não possuem 1 DAM
+      return {
+        Contribuinte: item.razao_social ? item.razao_social.trim().toUpperCase() : 'Sem informação',
+        dados: {
+          tipo: item.tipo === 1 ? 'Jurídica' : item.tipo === 0 ? 'Física' : 'Não informado',
+          cpf_cnpj: item.cpf_cnpj ? item.cpf_cnpj.replace(/\D/g, '') : 'Sem informação',
+          fantasia: item.fantasia ? item.fantasia.trim().toUpperCase() : 'Sem informação',
+          email: item.email && item.email.trim() ? item.email.trim() : 'Sem informação',
+          Telefone: item.contato && item.contato.trim() ? item.contato.trim() : 'Sem informação',
+          Celular: item.contato2 && item.contato2.trim() ? item.contato2.trim() : 'Sem informação'
+        },
+        endereco: {
+          pais: item.pais || 'Sem informação',
+          cidade_estado: item.cidade && item.estado ? `${item.cidade}/${item.estado}` : 'Sem informação',
+          tipo_logradouro: item.tipo_logradouro || 'Sem informação',
+          bairro: item.bairro || 'Sem informação',
+          cep: item.cep || 'Sem informação',
+          endereco: item.endereco || 'Sem informação',
+          numero: item.numero || 'Sem informação',
+          complemento: item.complemento || 'Sem informação',
+          site: item.site && item.site.trim() ? item.site.trim() : 'Sem informação'
+        },
+        dam // Adicionando o DAM do contribuinte
+      };
+    });
 
     res.json({
       success: true,
