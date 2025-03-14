@@ -87,11 +87,11 @@ exports.getContribuintes = async (req, res) => {
         l.nome AS tipo_logradouro,
         b.nome AS bairro
       FROM contribuinte c
-      LEFT JOIN pais p ON c.fk_pais = p.id
-      LEFT JOIN cidade ci ON c.fk_cidade = ci.id
-      LEFT JOIN estado e ON ci.fk_estado = e.id
-      LEFT JOIN logradouro l ON c.fk_tipo_logradouro = l.id
-      LEFT JOIN bairro b ON c.fk_bairro = b.id
+      JOIN pais p ON c.fk_pais = p.id
+      JOIN cidade ci ON c.fk_cidade = ci.id
+      JOIN estado e ON ci.fk_estado = e.id
+      JOIN logradouro l ON c.fk_tipo_logradouro = l.id
+      JOIN bairro b ON c.fk_bairro = b.id
       WHERE c.id BETWEEN 500 AND 1000
     `);
 
