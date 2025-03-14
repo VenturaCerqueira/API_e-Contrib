@@ -92,6 +92,7 @@ exports.getContribuintes = async (req, res) => {
       LEFT JOIN estado e ON ci.fk_estado = e.id
       LEFT JOIN logradouro l ON c.fk_tipo_logradouro = l.id
       LEFT JOIN bairro b ON c.fk_bairro = b.id
+      WHERE c.id BETWEEN 500 AND 1000
     `);
 
     const [damResults] = await db.promise().query(`
