@@ -64,7 +64,7 @@ exports.getContribuintes = async (req, res) => {
 
   try {
     const [results] = await db.promise().query(`
-      SELECT 
+     SELECT 
         c.tipo,
         c.cpf_cnpj,
         c.fantasia,
@@ -92,7 +92,8 @@ exports.getContribuintes = async (req, res) => {
       JOIN estado e ON ci.fk_estado = e.id
       JOIN logradouro l ON c.fk_tipo_logradouro = l.id
       JOIN bairro b ON c.fk_bairro = b.id
-      WHERE c.id BETWEEN 499 AND 800
+      JOIN imovel imv ON imv.fk_contribuinte = c.id
+      LIMIT 100;
     `);
 
     const [damResults] = await db.promise().query(`
@@ -101,12 +102,12 @@ exports.getContribuintes = async (req, res) => {
         cc.sigla, 
         SUM(lc.valor_total) AS valor_total
       FROM lancamento l 
-      JOIN lancamento_cota lc ON l.id = lc.fk_lancamento
-      JOIN conta_contabil cc ON cc.id = l.fk_conta_contabil
-      JOIN lancamento_baixa lb ON lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1
-      JOIN contribuinte c ON c.id = l.fk_contribuinte
+      JOIN lancamento_cota lc ON (l.id = lc.fk_lancamento)
+      JOIN conta_contabil cc ON (cc.id = l.fk_conta_contabil)
+      JOIN lancamento_baixa lb ON (lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1)
+      JOIN contribuinte c ON (c.id = l.fk_contribuinte)
       GROUP BY c.cpf_cnpj, cc.sigla
-      HAVING COUNT(cc.sigla) = 1
+      ORDER BY c.cpf_cnpj, cc.sigla
       LIMIT 10
     `);
 
