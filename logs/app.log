@@ -51,3 +51,55 @@
 {"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
 {"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
 {"level":"info","message":"Conexão bem-sucedida ao banco de dados"}
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[31merror[39m: Erro ao buscar dados: db.promise is not a function
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[31merror[39m: Erro ao buscar dados: db.promise is not a function
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[31merror[39m: Erro ao buscar dados: db.promise is not a function
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[31merror[39m: Erro ao buscar dados: db.promise is not a function
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[31merror[39m: Erro ao buscar dados: db.promise is not a function
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[31merror[39m: Erro ao buscar dados: db.promise is not a function
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[31merror[39m: Erro ao buscar dados: db.promise is not a function
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Consulta realizada com sucesso.
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1
+[32minfo[39m: Recebida requisição: GET /api/contribuintes - IP: ::1

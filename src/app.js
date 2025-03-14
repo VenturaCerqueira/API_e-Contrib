@@ -31,7 +31,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api', contribuintesRoutes);
 
 // Inicia o servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8888;
 const server = app.listen(PORT, () => {
   logger.info(`Servidor rodando na porta ${PORT}`);
 });

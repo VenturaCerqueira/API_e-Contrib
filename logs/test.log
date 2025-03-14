@@ -19,3 +19,9 @@
 {"level":"info","message":"Executando o teste GET /api/contribuintes"}
 {"level":"info","message":"Teste GET /api/contribuintes executado com sucesso"}
 {"level":"info","message":"Servidor fechado após os testes"}
+{"level":"info","message":"Executando o teste GET /api/contribuintes"}
+{"level":"info","message":"Teste GET /api/contribuintes executado com sucesso"}
+{"level":"info","message":"Servidor fechado após os testes"}
+{"level":"info","message":"Executando o teste GET /api/contribuintes"}
+{"level":"info","message":"Teste GET /api/contribuintes executado com sucesso"}
+{"level":"info","message":"Servidor fechado após os testes"}

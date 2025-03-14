@@ -1,43 +1,145 @@
 // src/controllers/contribuintes.controller.js
-const db = require('../config/db.config.js'); // Assumindo que a configuração de banco está em 'db.js'
+const db = require('../config/db.config.js'); // Importando o pool configurado
+const winston = require('winston');
 
-exports.getContribuintes = (req, res) => {
-  db.query('SELECT * FROM contribuinte', (err, results) => {
-    if (err) {
-      console.error('Erro ao buscar dados:', err);
-      return res.status(500).json({ error: 'Erro ao buscar dados' });
-    }
+// Configuração do logger do Winston
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.simple()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/app.log' })
+  ]
+});
 
-    // Tratamento dos dados
+/**
+ * @swagger
+ * /api/contribuintes:
+ *   get:
+ *     summary: Retorna a lista de contribuintes com dados detalhados e DAM
+ *     description: Retorna todos os contribuintes cadastrados com suas informações detalhadas e dados do DAM.
+ *     tags:
+ *       - Contribuintes
+ *     responses:
+ *       200:
+ *         description: Lista de contribuintes retornada com sucesso
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: Consulta realizada com sucesso.
+ *               data:
+ *                 - Contribuinte: "EMPRESA ABC"
+ *                   dados:
+ *                     tipo: "Jurídica"
+ *                     cpf_cnpj: "12345678000199"
+ *                     fantasia: "ABC"
+ *                     email: "contato@empresa.com"
+ *                     Telefone: "12345678"
+ *                     Celular: "987654321"
+ *                   endereco:
+ *                     pais: "Brasil"
+ *                     cidade_estado: "São Paulo/SP"
+ *                     tipo_logradouro: "Avenida"
+ *                     bairro: "Centro"
+ *                     cep: "01000000"
+ *                     endereco: "Av. Paulista"
+ *                     numero: "100"
+ *                     complemento: "Sala 101"
+ *                     site: "www.empresa.com"
+ *                   dam:
+ *                     - sigla: "DAM1"
+ *                       valor_total: 5000
+ *                     - sigla: "DAM2"
+ *                       valor_total: 3000
+ *       500:
+ *         description: Erro ao buscar dados
+ */
+
+exports.getContribuintes = async (req, res) => {
+  logger.info(`Recebida requisição: GET /api/contribuintes - IP: ${req.ip}`);
+
+  try {
+    const [results] = await db.promise().query(`
+      SELECT 
+        c.tipo,
+        c.cpf_cnpj,
+        c.fantasia,
+        c.email,
+        c.contato,
+        c.contato2,
+        c.razao_social,
+        c.fk_pais,
+        c.fk_cidade,
+        c.fk_tipo_logradouro,
+        c.fk_bairro,
+        c.cep,
+        c.endereco,
+        c.numero,
+        c.complemento,
+        c.site,
+        p.nome AS pais,
+        ci.nome AS cidade,
+        e.nome AS estado,
+        l.nome AS tipo_logradouro,
+        b.nome AS bairro
+      FROM contribuinte c
+      LEFT JOIN pais p ON c.fk_pais = p.id
+      LEFT JOIN cidade ci ON c.fk_cidade = ci.id
+      LEFT JOIN estado e ON ci.fk_estado = e.id
+      LEFT JOIN logradouro l ON c.fk_tipo_logradouro = l.id
+      LEFT JOIN bairro b ON c.fk_bairro = b.id
+      WHERE c.id BETWEEN 1 AND 300
+    `);
+
+    const [damResults] = await db.promise().query(`
+      SELECT 
+        c.cpf_cnpj, 
+        cc.sigla, 
+        SUM(lc.valor_total) AS valor_total
+      FROM lancamento l 
+      JOIN lancamento_cota lc ON (l.id = lc.fk_lancamento)
+      JOIN conta_contabil cc ON (cc.id = l.fk_conta_contabil)
+      JOIN lancamento_baixa lb ON (lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1)
+      JOIN contribuinte c ON (c.id = l.fk_contribuinte)
+      GROUP BY c.cpf_cnpj, cc.sigla
+      ORDER BY c.cpf_cnpj, cc.sigla
+      LIMIT 50
+    `);
+
+    // Mapeando os dados de contribuintes
     const dadosTratados = results.map(item => {
-      const contribuinte = {
-        tipo: item.tipo === 0 ? 'Jurídica' : item.tipo === 1 ? 'Física' : 'Não informado',
-        cpf_cnpj: item.cpf_cnpj.replace(/\D/g, ''),
-        fantasia: item.fantasia ? item.fantasia.trim().toUpperCase() : null,
-        email: item.email,
-        contato: item.contato,
-        contato2: item.contato2,
-        created_at: item.created_at ? new Date(item.created_at).toLocaleString() : null,
-        updated_at: item.updated_at ? new Date(item.updated_at).toLocaleString() : null
-      };
-
-      const endereco = {
-        fk_pais: item.fk_pais,
-        fk_cidade: item.fk_cidade,
-        fk_tipo_logradouro: item.fk_tipo_logradouro,
-        fk_bairro: item.fk_bairro,
-        fk_imovel_caracteristica: item.fk_imovel_caracteristica,
-        cep: item.cep,
-        endereco: item.endereco,
-        numero: item.numero,
-        complemento: item.complemento,
-        site: item.site
-      };
+      // Encontrar o DAM do contribuinte
+      const dam = damResults.filter(damItem => damItem.cpf_cnpj === item.cpf_cnpj).map(damItem => ({
+        sigla: damItem.sigla,
+        valor_total: damItem.valor_total
+      }));
 
       return {
-        Contribuinte: item.razao_social ? item.razao_social.trim().toUpperCase() : null,
-        dados: contribuinte,
-        endereco: endereco
+        Contribuinte: item.razao_social ? item.razao_social.trim().toUpperCase() : 'Sem informação',
+        dados: {
+          tipo: item.tipo === 1 ? 'Jurídica' : item.tipo === 0 ? 'Física' : 'Não informado',
+          cpf_cnpj: item.cpf_cnpj ? item.cpf_cnpj.replace(/\D/g, '') : 'Sem informação',
+          fantasia: item.fantasia ? item.fantasia.trim().toUpperCase() : 'Sem informação',
+          email: item.email && item.email.trim() ? item.email.trim() : 'Sem informação',
+          Telefone: item.contato && item.contato.trim() ? item.contato.trim() : 'Sem informação',
+          Celular: item.contato2 && item.contato2.trim() ? item.contato2.trim() : 'Sem informação'
+        },
+        endereco: {
+          pais: item.pais || 'Sem informação',
+          cidade_estado: item.cidade && item.estado ? `${item.cidade}/${item.estado}` : 'Sem informação',
+          tipo_logradouro: item.tipo_logradouro || 'Sem informação',
+          bairro: item.bairro || 'Sem informação',
+          cep: item.cep || 'Sem informação',
+          endereco: item.endereco || 'Sem informação',
+          numero: item.numero || 'Sem informação',
+          complemento: item.complemento || 'Sem informação',
+          site: item.site && item.site.trim() ? item.site.trim() : 'Sem informação'
+        },
+        dam // Adicionando o DAM do contribuinte
       };
     });
 
@@ -46,5 +148,10 @@ exports.getContribuintes = (req, res) => {
       message: 'Consulta realizada com sucesso.',
       data: dadosTratados
     });
-  });
+
+    logger.info('Consulta realizada com sucesso.');
+  } catch (err) {
+    logger.error(`Erro ao buscar dados: ${err.message}`);
+    res.status(500).json({ error: 'Erro ao buscar dados' });
+  }
 };
