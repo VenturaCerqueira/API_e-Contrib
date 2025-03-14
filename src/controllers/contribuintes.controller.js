@@ -92,7 +92,7 @@ exports.getContribuintes = async (req, res) => {
       JOIN estado e ON ci.fk_estado = e.id
       JOIN logradouro l ON c.fk_tipo_logradouro = l.id
       JOIN bairro b ON c.fk_bairro = b.id
-      WHERE c.id BETWEEN 500 AND 800
+      WHERE c.id BETWEEN 499 AND 800
     `);
 
     const [damResults] = await db.promise().query(`
