@@ -101,13 +101,13 @@ exports.getContribuintes = async (req, res) => {
         cc.sigla, 
         SUM(lc.valor_total) AS valor_total
       FROM lancamento l 
-      JOIN lancamento_cota lc ON (l.id = lc.fk_lancamento)
-      JOIN conta_contabil cc ON (cc.id = l.fk_conta_contabil)
-      JOIN lancamento_baixa lb ON (lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1)
-      JOIN contribuinte c ON (c.id = l.fk_contribuinte)
+      JOIN lancamento_cota lc ON l.id = lc.fk_lancamento
+      JOIN conta_contabil cc ON cc.id = l.fk_conta_contabil
+      JOIN lancamento_baixa lb ON lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1
+      JOIN contribuinte c ON c.id = l.fk_contribuinte
       GROUP BY c.cpf_cnpj, cc.sigla
-      ORDER BY c.cpf_cnpj, cc.sigla
-      LIMIT 50
+      HAVING COUNT(cc.sigla) = 1
+      LIMIT 10
     `);
 
     // Mapeando os dados de contribuintes
