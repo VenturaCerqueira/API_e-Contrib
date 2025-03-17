@@ -1,4 +1,4 @@
-const db = require('../config/db.config.js'); 
+const db = require('../config/db.config.js');
 const winston = require('winston');
 
 
@@ -31,9 +31,9 @@ const logger = winston.createLogger({
  *               success: true
  *               message: Consulta realizada com sucesso.
  *               data:
- *                 - Contribuinte: 
+ *                 - contribuinte: 
  *                     nome: "EMPRESA ABC"
- *                     dados:
+ *                     dados_cadastrais:
  *                       tipo: "Jurídica"
  *                       cpf_cnpj: "12345678000199"
  *                       fantasia: "ABC"
@@ -59,11 +59,12 @@ const logger = winston.createLogger({
  *         description: Erro ao buscar dados
  */
 
+
 exports.getContribuintes = async (req, res) => {
   logger.info(`Recebida requisição: GET /api/contribuintes - IP: ${req.ip}`);
 
   try {
-   
+    
     const [results] = await db.promise().query(`
       SELECT 
         c.id,
@@ -100,10 +101,9 @@ exports.getContribuintes = async (req, res) => {
         JOIN lancamento_cota lc ON l.id = lc.fk_lancamento
         JOIN lancamento_baixa lb ON lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1
       )
-      LIMIT 100;
     `);
 
-    
+    // Consulta dos dados do DAM
     const [damResults] = await db.promise().query(`
       SELECT 
         c.cpf_cnpj, 
@@ -118,7 +118,7 @@ exports.getContribuintes = async (req, res) => {
       ORDER BY c.cpf_cnpj, cc.sigla;
     `);
 
-    
+   
     const dadosTratados = results.map(item => {
       
       const dam = damResults
@@ -129,32 +129,35 @@ exports.getContribuintes = async (req, res) => {
         }));
 
       return {
-        nome: item.razao_social ? item.razao_social.trim().toUpperCase() : 'Sem informação',
-        dados: {
-          tipo: item.tipo === 1 ? 'Jurídica' : item.tipo === 0 ? 'Física' : 'Não informado',
-          cpf_cnpj: item.cpf_cnpj ? item.cpf_cnpj.replace(/\D/g, '') : 'Sem informação',
-          fantasia: item.fantasia ? item.fantasia.trim().toUpperCase() : 'Sem informação',
-          email: item.email && item.email.trim() ? item.email.trim() : 'Sem informação',
-          telefone: item.contato && item.contato.trim() ? item.contato.trim() : 'Sem informação',
-          celular: item.contato2 && item.contato2.trim() ? item.contato2.trim() : 'Sem informação'
-        },
-        endereco: {
-          pais: item.pais || 'Sem informação',
-          cidade_estado: item.cidade && item.estado ? `${item.cidade}/${item.estado}` : 'Sem informação',
-          tipo_logradouro: item.tipo_logradouro || 'Sem informação',
-          bairro: item.bairro || 'Sem informação',
-          cep: item.cep || 'Sem informação',
-          endereco: item.endereco || 'Sem informação',
-          numero: item.numero || 'Sem informação',
-          complemento: item.complemento || 'Sem informação',
-          site: item.site && item.site.trim() ? item.site.trim() : 'Sem informação'
-        },
-        dam 
+        contribuinte: {
+          nome: item.razao_social ? item.razao_social.trim().toUpperCase() : 'Sem informação',
+          dados_cadastrais: {
+            tipo: item.tipo === 1 ? 'Jurídica' : item.tipo === 0 ? 'Física' : 'Não informado',
+            cpf_cnpj: item.cpf_cnpj ? item.cpf_cnpj.replace(/\D/g, '') : 'Sem informação',
+            fantasia: item.fantasia ? item.fantasia.trim().toUpperCase() : 'Sem informação',
+            email: item.email && item.email.trim() ? item.email.trim() : 'Sem informação',
+            telefone: item.contato && item.contato.trim() ? item.contato.trim() : 'Sem informação',
+            celular: item.contato2 && item.contato2.trim() ? item.contato2.trim() : 'Sem informação'
+          },
+          endereco: {
+            pais: item.pais || 'Sem informação',
+            cidade_estado: item.cidade && item.estado ? `${item.cidade}/${item.estado}` : 'Sem informação',
+            tipo_logradouro: item.tipo_logradouro || 'Sem informação',
+            bairro: item.bairro || 'Sem informação',
+            cep: item.cep || 'Sem informação',
+            endereco: item.endereco || 'Sem informação',
+            numero: item.numero || 'Sem informação',
+            complemento: item.complemento || 'Sem informação',
+            site: item.site && item.site.trim() ? item.site.trim() : 'Sem informação'
+          },
+          dam  
+        }
       };
     });
 
-   
     res.json({
+      success: true,
+      message: 'Consulta realizada com sucesso.',
       data: dadosTratados
     });
 
