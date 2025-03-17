@@ -1,23 +1,52 @@
 version: '3.8'
+
 services:
+  # Serviço para o backend (API)
   app:
-    build: .
-    container_name: api_e_contrib
+    image: node:16
+    container_name: my_app_container
+    working_dir: /usr/src/app
+    volumes:
+      - ./src:/usr/src/app  
     ports:
-      - "3000:3000"
+      - "8888:8888"  
     environment:
-      - DB_HOST=db
+      - NODE_ENV=development
+      - DB_HOST=db  
       - DB_USER=anderson
       - DB_PASS=126303@acv
       - DB_NAME=db_gestaotributaria_riachaodojacuipe
       - DB_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=  
     depends_on:
       - db
+      - redis
+
+  # Serviço para o banco de dados MySQL
   db:
-    image: mysql:8
-    container_name: db_mysql
+    image: mysql:5.7
+    container_name: mysql_container
     environment:
-      MYSQL_ROOT_PASSWORD: 126303@acv
-      MYSQL_DATABASE: db_gestaotributaria_riachaodojacuipe
+      MYSQL_ROOT_PASSWORD: root_password  
+      MYSQL_DATABASE: db_gestaotributaria_riachaodojacuipe 
+      MYSQL_USER: anderson 
+      MYSQL_PASSWORD: 126303@acv  
     ports:
-      - "3306:3306"
+      - "3306:3306"  
+    volumes:
+      - db_data:/var/lib/mysql  s
+
+  # Serviço para o Redis (caso necessário)
+  redis:
+    image: redis:alpine
+    container_name: redis_container
+    ports:
+      - "6379:6379"  
+    command: ["redis-server", "--requirepass", ""]  
+
+# Volumes para persistência de dados
+volumes:
+  db_data:
+    driver: local

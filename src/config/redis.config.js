@@ -1,7 +1,6 @@
 const redis = require('redis');
 const winston = require('winston');
 
-// Configuração do logger do Winston
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -14,29 +13,42 @@ const logger = winston.createLogger({
   ],
 });
 
-// Criação de um cliente Redis
-const client = redis.createClient({
+const redisConfig = {
   socket: {
     host: process.env.REDIS_HOST || 'localhost',
     port: process.env.REDIS_PORT || 6379,
+    reconnectStrategy: (retries) => Math.min(retries * 50, 500), // Estratégia de reconexão progressiva
+    connectTimeout: 10000, // 10 segundos para conexão
   },
-  password: process.env.REDIS_PASSWORD || '',
-});
+  ...(process.env.REDIS_PASSWORD ? { password: process.env.REDIS_PASSWORD } : {}), // Só inclui a senha se for definida
+  tls: process.env.REDIS_TLS === 'true' ? {} : undefined, // Ativa SSL/TLS se estiver configurado
+};
 
-// Conectar explicitamente ao Redis
+const client = redis.createClient(redisConfig);
+
 (async () => {
   try {
     await client.connect();
     logger.info('✅ Conexão com o Redis estabelecida.');
   } catch (err) {
-    logger.error('❌ Erro ao conectar com o Redis: ' + err.message);
+    logger.error(`❌ Erro ao conectar com o Redis: ${err.message}`);
   }
 })();
 
 client.on('error', (err) => {
-  logger.error('❌ Erro ao conectar com o Redis: ' + err);
+  logger.error(`❌ Erro no Redis: ${err.message}`);
 });
 
-// Remove client.quit() ou client.disconnect() para manter a conexão aberta!
+// Graceful shutdown para desconectar o Redis
+process.on('SIGINT', async () => {
+  try {
+    await client.disconnect();
+    logger.info('🚪 Redis desconectado com sucesso.');
+  } catch (err) {
+    logger.error(`❌ Erro ao desconectar do Redis: ${err.message}`);
+  } finally {
+    process.exit(0);
+  }
+});
 
 module.exports = client;

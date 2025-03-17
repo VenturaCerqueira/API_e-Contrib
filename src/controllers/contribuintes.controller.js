@@ -1,8 +1,7 @@
-// src/controllers/contribuintes.controller.js
-const db = require('../config/db.config.js'); // Importando o pool configurado
+const db = require('../config/db.config.js'); 
 const winston = require('winston');
 
-// Configuração do logger do Winston
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
@@ -32,29 +31,30 @@ const logger = winston.createLogger({
  *               success: true
  *               message: Consulta realizada com sucesso.
  *               data:
- *                 - Contribuinte: "EMPRESA ABC"
- *                   dados:
- *                     tipo: "Jurídica"
- *                     cpf_cnpj: "12345678000199"
- *                     fantasia: "ABC"
- *                     email: "contato@empresa.com"
- *                     Telefone: "12345678"
- *                     Celular: "987654321"
- *                   endereco:
- *                     pais: "Brasil"
- *                     cidade_estado: "São Paulo/SP"
- *                     tipo_logradouro: "Avenida"
- *                     bairro: "Centro"
- *                     cep: "01000000"
- *                     endereco: "Av. Paulista"
- *                     numero: "100"
- *                     complemento: "Sala 101"
- *                     site: "www.empresa.com"
- *                   dam:
- *                     - sigla: "DAM1"
- *                       valor_total: 5000
- *                     - sigla: "DAM2"
- *                       valor_total: 3000
+ *                 - Contribuinte: 
+ *                     nome: "EMPRESA ABC"
+ *                     dados:
+ *                       tipo: "Jurídica"
+ *                       cpf_cnpj: "12345678000199"
+ *                       fantasia: "ABC"
+ *                       email: "contato@empresa.com"
+ *                       telefone: "12345678"
+ *                       celular: "987654321"
+ *                     endereco:
+ *                       pais: "Brasil"
+ *                       cidade_estado: "São Paulo/SP"
+ *                       tipo_logradouro: "Avenida"
+ *                       bairro: "Centro"
+ *                       cep: "01000000"
+ *                       endereco: "Av. Paulista"
+ *                       numero: "100"
+ *                       complemento: "Sala 101"
+ *                       site: "www.empresa.com"
+ *                     dam:
+ *                       - sigla: "DAM1"
+ *                         valor_total: 5000
+ *                       - sigla: "DAM2"
+ *                         valor_total: 3000
  *       500:
  *         description: Erro ao buscar dados
  */
@@ -63,8 +63,10 @@ exports.getContribuintes = async (req, res) => {
   logger.info(`Recebida requisição: GET /api/contribuintes - IP: ${req.ip}`);
 
   try {
+   
     const [results] = await db.promise().query(`
-     SELECT 
+      SELECT 
+        c.id,
         c.tipo,
         c.cpf_cnpj,
         c.fantasia,
@@ -92,40 +94,49 @@ exports.getContribuintes = async (req, res) => {
       JOIN estado e ON ci.fk_estado = e.id
       JOIN logradouro l ON c.fk_tipo_logradouro = l.id
       JOIN bairro b ON c.fk_bairro = b.id
-      JOIN imovel imv ON imv.fk_contribuinte = c.id
+      WHERE c.id IN (
+        SELECT DISTINCT l.fk_contribuinte 
+        FROM lancamento l
+        JOIN lancamento_cota lc ON l.id = lc.fk_lancamento
+        JOIN lancamento_baixa lb ON lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1
+      )
+      LIMIT 100;
     `);
 
+    
     const [damResults] = await db.promise().query(`
       SELECT 
         c.cpf_cnpj, 
         cc.sigla, 
         SUM(lc.valor_total) AS valor_total
       FROM lancamento l 
-      JOIN lancamento_cota lc ON (l.id = lc.fk_lancamento)
-      JOIN conta_contabil cc ON (cc.id = l.fk_conta_contabil)
-      JOIN lancamento_baixa lb ON (lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1)
-      JOIN contribuinte c ON (c.id = l.fk_contribuinte)
+      JOIN lancamento_cota lc ON l.id = lc.fk_lancamento
+      JOIN conta_contabil cc ON cc.id = l.fk_conta_contabil
+      JOIN lancamento_baixa lb ON lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1
+      JOIN contribuinte c ON c.id = l.fk_contribuinte
       GROUP BY c.cpf_cnpj, cc.sigla
-      ORDER BY c.cpf_cnpj, cc.sigla
+      ORDER BY c.cpf_cnpj, cc.sigla;
     `);
 
-    // Mapeando os dados de contribuintes
+    
     const dadosTratados = results.map(item => {
-      // Encontrar o DAM do contribuinte
-      const dam = damResults.filter(damItem => damItem.cpf_cnpj === item.cpf_cnpj).map(damItem => ({
-        sigla: damItem.sigla,
-        valor_total: damItem.valor_total
-      }));
+      
+      const dam = damResults
+        .filter(damItem => damItem.cpf_cnpj === item.cpf_cnpj)
+        .map(damItem => ({
+          sigla: damItem.sigla,
+          valor_total: damItem.valor_total
+        }));
 
       return {
-        Contribuinte: item.razao_social ? item.razao_social.trim().toUpperCase() : 'Sem informação',
+        nome: item.razao_social ? item.razao_social.trim().toUpperCase() : 'Sem informação',
         dados: {
           tipo: item.tipo === 1 ? 'Jurídica' : item.tipo === 0 ? 'Física' : 'Não informado',
           cpf_cnpj: item.cpf_cnpj ? item.cpf_cnpj.replace(/\D/g, '') : 'Sem informação',
           fantasia: item.fantasia ? item.fantasia.trim().toUpperCase() : 'Sem informação',
           email: item.email && item.email.trim() ? item.email.trim() : 'Sem informação',
-          Telefone: item.contato && item.contato.trim() ? item.contato.trim() : 'Sem informação',
-          Celular: item.contato2 && item.contato2.trim() ? item.contato2.trim() : 'Sem informação'
+          telefone: item.contato && item.contato.trim() ? item.contato.trim() : 'Sem informação',
+          celular: item.contato2 && item.contato2.trim() ? item.contato2.trim() : 'Sem informação'
         },
         endereco: {
           pais: item.pais || 'Sem informação',
@@ -138,13 +149,12 @@ exports.getContribuintes = async (req, res) => {
           complemento: item.complemento || 'Sem informação',
           site: item.site && item.site.trim() ? item.site.trim() : 'Sem informação'
         },
-        dam // Adicionando o DAM do contribuinte
+        dam 
       };
     });
 
+   
     res.json({
-      success: true,
-      message: 'Consulta realizada com sucesso.',
       data: dadosTratados
     });
 

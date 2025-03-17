@@ -1,35 +1,47 @@
-const { Contribuinte } = require('../models/contribuintes.model');
+const express = require('express');
+const router = express.Router();
+const contribuintesController = require('../controllers/contribuintes.controller');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');  
+const swaggerDocument = YAML.load('./src/config/swagger.yaml');  
 const winston = require('winston');
+const path = require('path');
 
-// Configuração do logger do Winston
+
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
-    winston.format.colorize(),
-    winston.format.simple()
+    winston.format.timestamp(), 
+    winston.format.colorize(),   
+    winston.format.printf(({ timestamp, level, message, ip }) => {
+      
+      return `${timestamp} [${level}] ${message} - IP: ${ip}`;
+    })
   ),
   transports: [
-    new winston.transports.Console({ format: winston.format.combine(winston.format.colorize(), winston.format.simple()) })
+    new winston.transports.Console(),  
+    new winston.transports.File({
+      filename: path.join(__dirname, '../../logs/requests.log'),  
+      level: 'info',
+      maxsize: 1000000,  
+      maxFiles: 5,       
+      tailable: true    
+    })
   ],
 });
 
-const getAllContribuintes = async () => {
-  try {
-    // Logando quando a busca de contribuintes começar
-    logger.info('Iniciando a busca de todos os contribuintes');
 
-    const contribuintes = await Contribuinte.findAll();
+router.use((req, res, next) => {
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;  
+  logger.info(`Recebida requisição: ${req.method} ${req.originalUrl}`, { ip });
+  next();
+});
 
-    // Logando o sucesso da operação
-    logger.info(`Número de contribuintes encontrados: ${contribuintes.length}`);
 
-    return contribuintes;
-  } catch (error) {
-    // Logando o erro
-    logger.error(`Erro ao buscar contribuintes: ${error.message}`);
-    
-    throw new Error('Erro ao buscar contribuintes');
-  }
-};
+router.get('/contribuintes', contribuintesController.getContribuintes);
 
-module.exports = { getAllContribuintes };
+
+router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Exporte as rotas
+module.exports = router;

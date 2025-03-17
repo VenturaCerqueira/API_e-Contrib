@@ -1,2 +1,35 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Definindo a codificação dos arquivos como UTF-8
+* text=auto eol=lf
+
+# Arquivos de configuração YAML e JSON
+*.yml    text
+*.yaml   text
+*.json   text
+
+# Arquivos de log não precisam ser versionados
+logs/*    linguist-generated
+
+# Arquivos de ambiente não devem ser versionados
+.env      linguist-generated
+
+# Definindo arquivos binários como binários para não comparar o conteúdo
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.svg    binary
+
+# Arquivos de código fonte
+*.js     text
+*.ts     text
+*.json   text
+*.css    text
+*.scss   text
+*.html   text
+
+# Arquivos de texto markdown
+*.md     text
+
+# Arquivos de teste
+*.test.js text
+*.spec.js text

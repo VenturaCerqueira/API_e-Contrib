@@ -3,15 +3,16 @@ info:
   title: API de Contribuintes
   description: API para consultar dados de contribuintes
   version: 1.0.0
+
 servers:
-  - url: http://localhost:3000/api
+  - url: http://localhost:8888/api
     description: Servidor local
 
 paths:
   /contribuintes:
     get:
       summary: Consulta dados dos contribuintes
-      description: Retorna uma lista de todos os contribuintes
+      description: Retorna uma lista de todos os contribuintes com informações detalhadas e valores de DAM.
       operationId: getContribuintes
       tags:
         - Contribuintes
@@ -34,9 +35,9 @@ paths:
                     items:
                       type: object
                       properties:
-                        Contribuinte:
+                        nome:
                           type: string
-                          example: "Empresa X"
+                          example: "Empresa XYZ"
                         dados:
                           type: object
                           properties:
@@ -52,33 +53,25 @@ paths:
                             email:
                               type: string
                               example: "contato@empresa.com"
-                            contato:
+                            telefone:
                               type: string
                               example: "123456789"
-                            contato2:
+                            celular:
                               type: string
                               example: "987654321"
-                            created_at:
-                              type: string
-                              format: date-time
-                              example: "2025-03-13T10:00:00Z"
-                            updated_at:
-                              type: string
-                              format: date-time
-                              example: "2025-03-13T10:00:00Z"
                         endereco:
                           type: object
                           properties:
-                            fk_pais:
+                            pais:
                               type: string
                               example: "Brasil"
-                            fk_cidade:
+                            cidade_estado:
                               type: string
-                              example: "Salvador"
-                            fk_tipo_logradouro:
+                              example: "São Paulo/SP"
+                            tipo_logradouro:
                               type: string
-                              example: "Rua"
-                            fk_bairro:
+                              example: "Avenida"
+                            bairro:
                               type: string
                               example: "Centro"
                             cep:
@@ -86,16 +79,28 @@ paths:
                               example: "40000000"
                             endereco:
                               type: string
-                              example: "Av. Sete de Setembro"
+                              example: "Av. Paulista"
                             numero:
                               type: string
-                              example: "123"
+                              example: "100"
                             complemento:
                               type: string
-                              example: "Apto 202"
+                              example: "Sala 101"
                             site:
                               type: string
                               example: "www.empresa.com.br"
+                        dam:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              sigla:
+                                type: string
+                                example: "DAM1"
+                              valor_total:
+                                type: number
+                                format: float
+                                example: 5000.50
         '500':
           description: Erro ao buscar dados
           content:
