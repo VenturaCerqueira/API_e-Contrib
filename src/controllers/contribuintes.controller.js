@@ -93,7 +93,6 @@ exports.getContribuintes = async (req, res) => {
       JOIN logradouro l ON c.fk_tipo_logradouro = l.id
       JOIN bairro b ON c.fk_bairro = b.id
       JOIN imovel imv ON imv.fk_contribuinte = c.id
-      LIMIT 100;
     `);
 
     const [damResults] = await db.promise().query(`
@@ -108,7 +107,6 @@ exports.getContribuintes = async (req, res) => {
       JOIN contribuinte c ON (c.id = l.fk_contribuinte)
       GROUP BY c.cpf_cnpj, cc.sigla
       ORDER BY c.cpf_cnpj, cc.sigla
-      LIMIT 10
     `);
 
     // Mapeando os dados de contribuintes
