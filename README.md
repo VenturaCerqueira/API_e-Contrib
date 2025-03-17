@@ -1,18 +1,14 @@
+![image](https://github.com/user-attachments/assets/9900b64b-2f39-4d45-9779-f0df3af98be7)
 # Projeto Gestão Tributária
 
 Este projeto é uma API desenvolvida para consulta de informações de contribuintes, seus dados cadastrais, endereços e dados relacionados ao DAM (Documento de Arrecadação Municipal). A API foi construída utilizando Node.js com o framework Express, MySQL como banco de dados e Swagger para documentação da API.
 
-* **Acesse (Get): **
+* **Acesse (Get):**
 
 > ```
 >> https://api-e-contrib.onrender.com/api/contribuintes
 > ```
 
-* **Swagger documentação:**
-
-```
-https://api-e-contrib.onrender.com/api/api-docs
-```
 
 ## Tecnologias utilizadas:
 
@@ -44,17 +40,17 @@ Certifique-se de ter as seguintes dependências instaladas em seu ambiente:
 
 1. Clone este repositório:
 
-   ```bash
+   ```
    git clone https://github.com/usuario/projeto-gestao-tributaria.git
    ```
 
 <h3> Navegue até o diretório do projeto:<h3>
 
-`cd projeto-gestao-tributaria`
+ ```cd projeto-gestao-tributaria ```
 
 <h3> Instale as dependências:</h3>
 
-`npm install`
+ ```npm install ```
 
 <h3> Crie um arquivo .env na raiz do projeto e adicione as credenciais do banco de dados:</h3>
 
@@ -78,14 +74,12 @@ DB_PORT=3306
 `npm test`
 
 ## Documentação da API (Swagger)
-
-```markdown
-## Documentação da API
+![image](https://github.com/user-attachments/assets/7cf9879a-0814-4190-a982-0b0827cf9f4d)
 
 A documentação da API está disponível via Swagger. Ao rodar o projeto, acesse a documentação em:
-
 ```
-
+https://api-e-contrib.onrender.com/api/api-docs
+```
 A documentação contém todas as rotas disponíveis, seus parâmetros e exemplos de respostas.
 
 ### Endpoints principais:
