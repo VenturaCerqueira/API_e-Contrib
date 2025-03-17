@@ -21,7 +21,7 @@ const redisConfig = {
     connectTimeout: 10000, // 10 segundos para conexão
   },
   ...(process.env.REDIS_PASSWORD ? { password: process.env.REDIS_PASSWORD } : {}), // Só inclui a senha se for definida
-  tls: process.env.REDIS_TLS === 'true' ? {} : undefined, // Ativa SSL/TLS se estiver configurado
+  tls: process.env.REDIS_TLS === 'true' ? {} : undefined, 
 };
 
 const client = redis.createClient(redisConfig);

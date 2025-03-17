@@ -35,7 +35,7 @@ const transports = [
       winston.format.colorize(),
       format
     ),
-    handleExceptions: true, // Captura exceções não tratadas
+    handleExceptions: true, 
   }),
   new winston.transports.File({
     filename: 'logs/combined.log',
@@ -54,7 +54,7 @@ const logger = winston.createLogger({
   level: level(),
   levels,
   transports,
-  exitOnError: false, // Não encerra o processo em caso de erro
+  exitOnError: false, 
 });
 
 module.exports = logger;

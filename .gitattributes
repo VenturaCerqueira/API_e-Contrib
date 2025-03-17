@@ -1,18 +1,18 @@
-# Definindo a codificação dos arquivos como UTF-8
+# Definindo codificação dos arquivos como UTF-8
 * text=auto eol=lf
 
-# Arquivos de configuração YAML e JSON
+# Arquivos configuração YAML e JSON
 *.yml    text
 *.yaml   text
 *.json   text
 
-# Arquivos de log não precisam ser versionados
+# Arquivos log 
 logs/*    linguist-generated
 
-# Arquivos de ambiente não devem ser versionados
+# Arquivos de ambiente 
 .env      linguist-generated
 
-# Definindo arquivos binários como binários para não comparar o conteúdo
+# Arquivos binários como binários 
 *.png    binary
 *.jpg    binary
 *.jpeg   binary

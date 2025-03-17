@@ -1,16 +1,16 @@
-require('dotenv').config();  // Isso carrega as variáveis do .env
+require('dotenv').config();  
 
 const request = require('supertest');
-const { app, server } = require('../app');  // Desestruturando para acessar o 'server'
+const { app, server } = require('../app');  
 const db = require('../config/db.config.js');
-const winston = require('winston');  // Importando o winston
+const winston = require('winston');  
 
 // Configuração do winston para logs
 const logger = winston.createLogger({
   level: 'info', // Pode ser 'info', 'warn', 'error', etc.
   transports: [
-    new winston.transports.Console({ format: winston.format.simple() }), // Log no console
-    new winston.transports.File({ filename: 'logs/test.log', level: 'info' }), // Log no arquivo
+    new winston.transports.Console({ format: winston.format.simple() }), 
+    new winston.transports.File({ filename: 'logs/test.log', level: 'info' }), 
   ],
 });
 
@@ -32,7 +32,7 @@ jest.mock('../config/db.config.js', () => ({
         updated_at: '2025-03-13',
       },
     ];
-    callback(null, mockData);  // Simulando a resposta com dados
+    callback(null, mockData);  
   }),
 }));
 
@@ -57,7 +57,7 @@ describe('GET /api/contribuintes', () => {
   });
 });
 
-// Fechar o servidor após os testes
+// Fechar o servidor após testes
 afterAll((done) => {
   server.close(() => {
     logger.info('Servidor fechado após os testes');

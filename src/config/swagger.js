@@ -26,10 +26,10 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 /**
- * Configura a documentação Swagger na aplicação.
+ * Configuração documentação Swagger na aplicação.
  *
- * @param {Express} app - Instância do Express para aplicar o Swagger UI.
- * @param {string} url - Rota onde a documentação estará disponível.
+ * @param {Express} app 
+ * @param {string} url - Rota documentação .
  */
 const setupSwagger = (app, url = '/api-docs') => {
   app.use(url, swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -1,91 +1,52 @@
-require('dotenv').config();  
+// Função para formatar os dados do contribuinte
+const formatContribuinteData = (contribuinte) => {
+  return {
+    nome: contribuinte.razao_social ? contribuinte.razao_social.trim().toUpperCase() : 'Sem informação',
+    dados_cadastrais: {
+      tipo: contribuinte.tipo === 1 ? 'Jurídica' : contribuinte.tipo === 0 ? 'Física' : 'Não informado',
+      cpf_cnpj: contribuinte.cpf_cnpj ? contribuinte.cpf_cnpj.replace(/\D/g, '') : 'Sem informação',
+      fantasia: contribuinte.fantasia ? contribuinte.fantasia.trim().toUpperCase() : 'Sem informação',
+      email: contribuinte.email && contribuinte.email.trim() ? contribuinte.email.trim() : 'Sem informação',
+      telefone: contribuinte.contato && contribuinte.contato.trim() ? contribuinte.contato.trim() : 'Sem informação',
+      celular: contribuinte.contato2 && contribuinte.contato2.trim() ? contribuinte.contato2.trim() : 'Sem informação',
+    },
+    endereco: {
+      pais: contribuinte.pais || 'Sem informação',
+      cidade_estado: contribuinte.cidade && contribuinte.estado ? `${contribuinte.cidade}/${contribuinte.estado}` : 'Sem informação',
+      tipo_logradouro: contribuinte.tipo_logradouro || 'Sem informação',
+      bairro: contribuinte.bairro || 'Sem informação',
+      cep: contribuinte.cep || 'Sem informação',
+      endereco: contribuinte.endereco || 'Sem informação',
+      numero: contribuinte.numero || 'Sem informação',
+      complemento: contribuinte.complemento || 'Sem informação',
+      site: contribuinte.site && contribuinte.site.trim() ? contribuinte.site.trim() : 'Sem informação',
+    },
+  };
+};
 
-const request = require('supertest');
-const { app, server } = require('../app');  
-const db = require('../config/db.config.js');
-const winston = require('winston');  
+// Função para formatar dados do DAM
+const formatDAMData = (damResults, cpfCnpj) => {
+  return damResults
+    .filter(damItem => damItem.cpf_cnpj === cpfCnpj)
+    .map(damItem => ({
+      sigla: damItem.sigla,
+      valor_total: damItem.valor_total,
+    }));
+};
 
+// Função principal para formatar todos os dados do contribuinte
+const formatContribuinteWithDAM = (contribuinte, damResults) => {
+  const formattedContribuinte = formatContribuinteData(contribuinte);
+  const damData = formatDAMData(damResults, contribuinte.cpf_cnpj);
 
-const logger = winston.createLogger({
-  level: 'info', 
-  transports: [
-    new winston.transports.Console({ format: winston.format.simple() }), 
-    new winston.transports.File({ filename: 'logs/test.log', level: 'info' }), 
-  ],
-});
+  return {
+    ...formattedContribuinte,
+    dam: damData,
+  };
+};
 
-
-jest.mock('../config/db.config.js', () => ({
-  query: jest.fn((query, callback) => {
-    
-    const mockData = [
-      {
-        id: 1,
-        nome: 'Empresa XYZ',
-        tipo: 'Jurídica',
-        cpf_cnpj: '12345678000195',
-        fantasia: 'Empresa XYZ',
-        email: 'contato@empresa.com',
-        contato: '123456789',
-        contato2: '987654321',
-        endereco: {
-          pais: 'Brasil',
-          cidade_estado: 'São Paulo/SP',
-          tipo_logradouro: 'Avenida',
-          bairro: 'Centro',
-          cep: '40000000',
-          endereco: 'Av. Paulista',
-          numero: '100',
-          complemento: 'Sala 101',
-          site: 'www.empresa.com.br',
-        },
-        dam: [
-          {
-            sigla: 'DAM1',
-            valor_total: 5000.50,
-          },
-          {
-            sigla: 'DAM2',
-            valor_total: 2000.75,
-          }
-        ],
-      },
-    ];
-    callback(null, mockData);  
-  }),
-}));
-
-describe('GET /api/contribuintes', () => {
-  it('deve retornar 200 e dados dos contribuintes', async () => {
-    const response = await request(app).get('/api/contribuintes');
-    
-    // Log de execução do teste
-    logger.info('Executando o teste GET /api/contribuintes');
-    
-    // Verificando o status da resposta
-    expect(response.status).toBe(200);  // Verifica se a resposta tem status 200
-    
-    // Verificando a propriedade 'data' na resposta
-    expect(response.body).toHaveProperty('data');  // Verifica se existe a chave 'data' na resposta
-    
-    // Verificando se há pelo menos um contribuinte retornado
-    expect(response.body.data.length).toBeGreaterThan(0);  // Verifica se há pelo menos um contribuinte retornado
-    
-    // Verificando se o campo 'dam' está presente
-    expect(response.body.data[0]).toHaveProperty('dam');  // Verifica se existe a chave 'dam' na resposta
-    
-    // Verificando se o campo 'endereco' está presente
-    expect(response.body.data[0]).toHaveProperty('endereco');  // Verifica se existe a chave 'endereco' na resposta
-    
-    // Log de sucesso após execução do teste
-    logger.info('Teste GET /api/contribuintes executado com sucesso');
-  });
-});
-
-// Fechar o servidor após os testes
-afterAll((done) => {
-  server.close(() => {
-    logger.info('Servidor fechado após os testes');
-    done();
-  });
-});
+module.exports = {
+  formatContribuinteData,
+  formatDAMData,
+  formatContribuinteWithDAM,
+};

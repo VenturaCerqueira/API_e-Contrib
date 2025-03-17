@@ -38,7 +38,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql  s
 
-  # Serviço para o Redis (caso necessário)
+  # Serviço para o Redis 
   redis:
     image: redis:alpine
     container_name: redis_container

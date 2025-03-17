@@ -14,8 +14,8 @@ if (!fs.existsSync(logDir)) {
 const logger = winston.createLogger({
   level: 'info', // Pode ser 'info', 'warn', 'error', etc.
   transports: [
-    new winston.transports.Console({ format: winston.format.simple() }), // Log no console
-    new winston.transports.File({ filename: path.join(logDir, 'app.log'), level: 'info' }) // Log no arquivo
+    new winston.transports.Console({ format: winston.format.simple() }), 
+    new winston.transports.File({ filename: path.join(logDir, 'app.log'), level: 'info' }) 
   ],
 });
 
