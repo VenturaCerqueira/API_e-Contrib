@@ -101,6 +101,7 @@ exports.getContribuintes = async (req, res) => {
         JOIN lancamento_cota lc ON l.id = lc.fk_lancamento
         JOIN lancamento_baixa lb ON lb.fk_lancamento_cota = lc.id AND lb.fk_modalidade = 1
       )
+      LIMIT 500
     `);
 
     // Consulta dos dados do DAM
